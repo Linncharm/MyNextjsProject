@@ -161,3 +161,13 @@ a.secondary {
   height: 100%;
   width: 100%;
 }
+
+
+
+.menu{
+  width: 300px;
+}
+
+.table{
+  flex:1;
+}
