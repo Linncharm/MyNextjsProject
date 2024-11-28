@@ -2,10 +2,6 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { Button , Table } from 'antd';
 
-import {
-    AppstoreOutlined,
-    MailOutlined,
-} from '@ant-design/icons';
 
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd';
@@ -18,7 +14,6 @@ const items: MenuItem[] = [
     {
         key: 'sub1',
         label: 'Country',
-        icon: <MailOutlined />,
         children: [
             { key: '5', label: 'US' },
             { key: '6', label: 'China' },
@@ -29,7 +24,6 @@ const items: MenuItem[] = [
     {
         key: 'sub2',
         label: 'Protocol',
-        icon: <AppstoreOutlined />,
         children: [
             { key: '9', label: 'HTTP' },
             { key: '10', label: 'Socks 4' },
@@ -40,7 +34,6 @@ const items: MenuItem[] = [
     {
         key: 'sub3',
         label: 'Anonymity Level',
-        icon: <AppstoreOutlined />,
         children: [
             { key: '13', label: 'Http (anonymous)' },
             { key: '14', label: 'Http (high)' },
