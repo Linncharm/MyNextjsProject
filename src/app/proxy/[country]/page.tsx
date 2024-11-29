@@ -1,14 +1,14 @@
 // app/proxy-[country]/page.tsx
 import { createClient } from "@/utils/supabase/server";
 
-export default async function ProxyCountryPage({ params }: { params: { country: string } }) {
+export default async function ProxyCountryPage({ params }: { params: { filter: string } }) {
     const supabase = await createClient();
 
     // 从 Supabase 数据库中获取国家信息
     const { data, error } = await supabase
-        .from("countries")
+        .from("proxy")
         .select("*")
-        .eq("slug", params.country)
+        .eq(`${params.filter}`, params.filter)
         .single();
 
     if (error) {
@@ -18,8 +18,8 @@ export default async function ProxyCountryPage({ params }: { params: { country: 
 
     return (
         <div>
-            <h1>访问的国家: {data.name}</h1>
-            <p>更多关于 {data.name} 的信息...</p>
+            <h1>访问的地址: {data.address}</h1>
+            <p>协议为：{data.protocol}</p>
         </div>
     );
 }

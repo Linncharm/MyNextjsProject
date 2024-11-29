@@ -9,47 +9,12 @@ import { createClient } from "@/utils//supabase/client";
 
 
 import { Menu } from 'antd';
-import type { MenuProps } from 'antd';
-
-import {columns} from "@/app/proxy/data";
-
-type MenuItem = Required<MenuProps>['items'][number];
-
-const items: MenuItem[] = [
-    {
-        key: 'sub1',
-        label: 'Country',
-        children: [
-            { key: '5', label: 'US' },
-            { key: '6', label: 'China' },
-            { key: '7', label: 'Japan' },
-            { key: '8', label: 'USA' },
-        ],
-    },
-    {
-        key: 'sub2',
-        label: 'Protocol',
-        children: [
-            { key: '9', label: 'HTTP' },
-            { key: '10', label: 'Socks 4' },
-            { key: '11', label: 'Socks 5' },
-            { key: '12', label: 'HTTPS' },
-        ],
-    },
-    {
-        key: 'sub3',
-        label: 'Anonymity Level',
-        children: [
-            { key: '13', label: 'Http (anonymous)' },
-            { key: '14', label: 'Http (high)' },
-            { key: '15', label: 'Http (transparent)' },
-            { key: '16', label: 'Socks4 (very high)' },
-            { key: '17', label: 'Socks5 (very high)' },
 
 
-],
-    },
-];
+import {columns,items} from "@/app/proxy/data";
+
+
+
 
 export default function Home() {
 
@@ -74,9 +39,53 @@ export default function Home() {
         fetchCountries();
     }, [supabase]);
 
-    const handleMenuClick = (e: { key: string }) => {
-        router.push(`/proxy/${e.key}`); // 跳转到动态路由
+    //从数据库获取路由信息。路径
+    const handleMenuClick = (e: { key: string}) => {
+        const fetchProxyPath = async () => {
+            let type:string='country';
+            if(e.key == 'china' || e.key == 'japan' || e.key == 'us' || e.key == 'usa'){
+                type = 'country';
+            }
+            if (e.key == 'http' || e.key == 'socks4' || e.key == 'socks5' || e.key == 'https'){
+                type = 'protocol';
+            }
+            if (e.key == 'http-anonymous' || e.key == 'http-high' || e.key == 'http-transparent' || e.key == 'socks4-very-high' || e.key == 'socks5-very-high'){
+                type = 'anonymity';
+            }
+            try {
+                //一定要将supabase的表设置为public
+                // 从 Supabase 查询数据
+                const { data, error } = await supabase
+                    .from("router")
+                    .select("path") // 只查询所需字段，优化性能
+                    .eq(type, e.key)
+                    .single(); // 确保只返回一条记录
+
+                // 处理错误
+                if (error) {
+                    console.error("查询失败：", error.message);
+                    alert(`无法获取国家路径，错误信息：${error.message},${e.type},${data}`);
+                    return;
+                }
+
+                // 确保 data 存在
+                if (!data || !data.path) {
+                    console.error("查询结果为空或缺少 'path' 字段");
+                    alert(`无法获取有效的国家路径，请稍后重试。${data.path}`);
+                    return;
+                }
+
+                // 跳转到动态路由
+                router.push(`/proxy/${data.path}`);
+            } catch (err) {
+                console.error("发生意外错误：", err);
+                alert("发生意外错误，请稍后重试。");
+            }
+        };
+
+        fetchProxyPath();
     };
+
 
     return (
         <div className={styles.page}>
