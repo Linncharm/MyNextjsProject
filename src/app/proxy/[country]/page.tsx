@@ -12,7 +12,7 @@ import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 
 export default function Home({ params }: { params: {params:Promise<{country:string}>} }) {
-    const { country } = React.use(params);
+    const { country } = params;
     const [countries, setCountries] = useState([]);
     const [selectedKey, setSelectedKey] = useState("1"); // 维护选中的 key
     const [isLoading, setIsLoading] = useState(true); // 新增加载状态
