@@ -11,8 +11,19 @@ import { columns, items } from "@/app/proxy/[country]/data";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 
+
+
 export default function Home({ params }: { params: {params:Promise<{country:string}>} }) {
-    const { country } = params;
+    const getPath = async (): Promise<string | undefined> => {
+        try {
+            const { country } = await params; // 直接解构出 country
+            return country;
+        } catch (e) {
+            console.error("获取路径失败:", e);
+            return undefined; // 返回 undefined 表示路径无效
+        }
+    };
+    //const { country } = params;
     const [countries, setCountries] = useState([]);
     const [selectedKey, setSelectedKey] = useState("1"); // 维护选中的 key
     const [isLoading, setIsLoading] = useState(true); // 新增加载状态
@@ -20,6 +31,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
     const router = useRouter();
 
     useEffect(() => {
+        const path = getPath();
         const fetchProxies = async (type:string) => {
             try {
                 const { data, error } = await supabase
@@ -68,27 +80,28 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                 return;
             }
         };
-
         // 获取初始数据
-        const fetchData = async (path:string) => {
-            console.log("params",params)
-            console.log("!!!",path)
+        const fetchData = async () => {
             try {
-                const isSelectKey = await fetchSelectedKey(path);
-                console.log("???",isSelectKey)
-                console.log(selectedKey)
-                if(isSelectKey){
-                    await fetchProxies(isSelectKey);
-                }else {
-                    console.error("未返回有效的值")
+                const path = await getPath(); // 等待获取 path
+                if (path) {
+                    const isSelectKey = await fetchSelectedKey(path);
+                    if (isSelectKey) {
+                        await fetchProxies(isSelectKey);
+                    } else {
+                        console.error("未返回有效的类型键值");
+                    }
+                } else {
+                    console.error("未获取有效路径");
                 }
-            }catch (e){
-                console.error(e)
+            } catch (e) {
+                console.error("数据加载失败:", e);
+            } finally {
+                setIsLoading(false); // 数据加载完成后更新状态
             }
-            setIsLoading(false); // 数据加载完毕，更新加载状态
         };
 
-        fetchData(country);
+        fetchData();
     }, [supabase]);
 
     // 从数据库获取路由信息。路径
