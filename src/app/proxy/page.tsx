@@ -11,7 +11,7 @@ import { createClient } from "@/utils//supabase/client";
 import { Menu } from 'antd';
 import type { MenuProps } from 'antd';
 
-import {dataSource,columns} from "@/app/data";
+import {columns} from "@/app/proxy/data";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
