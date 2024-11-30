@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import {Button, Table, Tooltip} from 'antd';
+import {Button, Table, Tooltip, Collapse, Select} from 'antd';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Menu , message} from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
-import {CopyOutlined} from "@ant-design/icons";
+import {qaData} from "@/app/proxy/qAndA"
+import {CopyOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
@@ -129,6 +130,11 @@ export default function Home() {
         );
     }
 
+    const customExpandIcon = ({ isActive }) => (
+        isActive ? <MinusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px' }} />
+            : <PlusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px'}} />
+    );
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
@@ -144,7 +150,7 @@ export default function Home() {
                     <h3>Use Free Proxies with DICloak Browser. Stay Secure and Anonymous!</h3>
                     <Button
                         className={styles.cardButton}
-                        href={"https://dicloak.com/download"}
+                        onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
                     >
                         Download DICloak Browser
                     </Button>
@@ -160,14 +166,87 @@ export default function Home() {
                         items={items}
                         onClick={handleMenuClick}
                     />
-                    <Table
-                        className={styles.table}
-                        dataSource={countries}
-                        columns={generateColumns(columns)}
-                        pagination={false}
-                        rowKey="id"
-                        scroll={{ y: 628 }}
-                    />
+                    <div className={styles.table}>
+                        <div className={styles.download}>
+                            <div style={{padding: '10px,', marginTop: '10px',marginBottom:'10px',marginRight:'15px',marginLeft:'20px'}}>
+                                <h2>Download our free proxy list in:</h2>
+                            </div>
+                            <div className={styles.downloadGroup}>
+                                <Select>
+
+                                </Select>
+                                <Button>
+
+                                </Button>
+                            </div>
+
+                        </div>
+                        <Table
+                            dataSource={countries}
+                            columns={generateColumns(columns)}
+                            pagination={{
+                                position: ['bottomCenter'],
+                                pageSize: 30,
+                            }}
+                            rowKey="id"
+                            scroll={{ y: 628 }}
+                        />
+                    </div>
+                </div>
+                <div className={styles.bottomCard}>
+                    <h1
+                        style={{
+                            textAlign: 'left',
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            cursor: 'pointer',
+                            transition: 'color 0.3s',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#13c798')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
+                        onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
+                    >
+                        Guide to Using a Free Proxy with DICloak Antidetect Browser
+                        <span style={{marginRight: '10px'}}> {/* 图标与文本之间的间距 */}
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="-5 -5 24 24"
+                                 stroke-linecap="round" stroke-linejoin="round" className="ml-2 inline-block"
+                                 height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path
+                                d="M7 7h10v10"></path><path d="M7 17 17 7"></path>
+                            </svg>
+                        </span>
+                    </h1>
+                    <h4 style={{margin: '20px 0', lineHeight: '1.5', color: '#bfb9b9'}}>
+                        Our website offers a variety of free proxy types to suit your needs. You can easily download our
+                        free proxy list in TXT, CSV, or JSON format for offline access.
+                    </h4>
+                    <h4 style={{margin: '20px 0', lineHeight: '1.5', color: '#a29e9e'}}>
+                    Explore our free online proxy options to keep your browsing private and bypass geo-restrictions
+                        with ease. Stay anonymous and secure your personal data with our reliable proxy servers. Join
+                        thousands of users who trust us to find the best free proxies, including free web proxies and
+                        proxy servers, available today.
+                    </h4>
+                </div>
+                <div className={styles.questionAndAnswer}>
+                    <div className={styles.questionTitle}>
+                        <h1>Frequently Asked Questions</h1>
+                    </div>
+                    <div className={styles.questionContent}>
+                        <Collapse
+                            expandIcon={customExpandIcon}
+                            expandIconPosition={'right'}
+                        >
+                            {qaData.map((qa, index) => (
+                                <Collapse.Panel
+                                    header={<h1
+                                        style={{fontSize: '20px', margin: 0}}>{qa.question}</h1>} // 使用 h1 标签作为 header
+                                    key={index}
+                                    style={{backgroundColor: '#f0f0f0'}}
+                                >
+                                    <h3 style={{margin: 0 ,color:'#777575'}}>{qa.answer}</h3> {/* 使用 h3 标签作为内容 */}
+                                </Collapse.Panel>
+                            ))}
+                        </Collapse>
+                    </div>
                 </div>
             </main>
             {contextHolder} {/* Render the message context holder here */}

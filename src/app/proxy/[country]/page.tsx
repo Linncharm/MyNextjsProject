@@ -10,7 +10,7 @@ import { Menu } from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
 import { Simulate } from "react-dom/test-utils";
 import { CopyOutlined } from '@ant-design/icons';
-import { dataSource } from "@/app/data";
+import { qaData} from "@/app/proxy/[country]/qAndA";
 
 export default function Home({ params }: { params: {params:Promise<{country:string}>} }) {
     const getPath = async (): Promise<string | undefined> => {
