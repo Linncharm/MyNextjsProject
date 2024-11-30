@@ -1,4 +1,5 @@
 import {Space} from "antd";
+import {CopyOutlined} from "@ant-design/icons";
 
 export const items = [
     {
@@ -60,5 +61,5 @@ export const columns = [
         title: 'Anonymity Level',
         dataIndex: 'anonymity_level',
         key: 'anonymity'
-    }
+    },
 ];

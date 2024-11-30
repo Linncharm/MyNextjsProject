@@ -2,18 +2,23 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Button, Table } from 'antd';
+import {Button, Table, Tooltip} from 'antd';
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Menu } from 'antd';
+import { Menu , message} from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
+import {CopyOutlined} from "@ant-design/icons";
 
 export default function Home() {
+    const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const [countries, setCountries] = useState([]);
     const [selectedKey, setSelectedKey] = useState<string>('1'); // 维护选中的 key
     const supabase = createClient();
+
+    // 使用 useMessage hook 创建消息实例
+    const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         // 从数据库加载国家信息
@@ -25,6 +30,7 @@ export default function Home() {
                     id: index + 1, // 自增 ID
                 }));
                 setCountries(processedData || []);
+                setIsLoading(false);
             }
         };
 
@@ -80,31 +86,91 @@ export default function Home() {
         fetchProxyPath();
     };
 
+    const handleCopy = (address: string) => {
+        navigator.clipboard.writeText(address).then(() => {
+            console.log('Address copied to clipboard!');
+            messageApi.success('Address copied to clipboard!');
+        }).catch(() => {
+            messageApi.error('Failed to copy address.');
+        });
+    };
+
+    const generateColumns = (columns) => {
+        const newColumns = [...columns];
+        const copyColumn = {
+            title: 'Copy',
+            dataIndex: 'copy',
+            key: 'copy',
+            render: (_, record) => (
+                <Tooltip title="Click to copy address">
+                    <CopyOutlined
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleCopy(record.address || '')}
+                    />
+                </Tooltip>
+            ),
+        };
+
+        const addressIndex = newColumns.findIndex(col => col.dataIndex === 'address');
+        if (addressIndex !== -1) {
+            newColumns.splice(addressIndex + 1, 0, copyColumn);
+        } else {
+            newColumns.push(copyColumn);
+        }
+
+        return newColumns;
+    };
+
+    if (isLoading) {
+        return (
+            <div className={styles.isLoading}>
+                <span>Loading...</span>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
                 <h1>Free Proxy Server List</h1>
                 <div className={styles.subtilte}>
-                    <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of reliable and secure free proxies, including free web proxies and proxy servers, all available to meet your online needs. Our free proxy list is regularly updated to ensure you have access to the latest free proxy sites and hosts. Whether you need an online proxy free of charge or a secure proxy server, we’ve got you covered with the best options available.</h3>
+                    <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of
+                        reliable and secure free proxies, including free web proxies and proxy servers, all available to
+                        meet your online needs. Our free proxy list is regularly updated to ensure you have access to
+                        the latest free proxy sites and hosts. Whether you need an online proxy free of charge or a
+                        secure proxy server, we’ve got you covered with the best options available.</h3>
                 </div>
                 <div className={styles.card}>
                     <h3>Use Free Proxies with DICloak Browser. Stay Secure and Anonymous!</h3>
-                    <Button className={styles.cardButton}>Download DICloak Browser</Button>
+                    <Button
+                        className={styles.cardButton}
+                        href={"https://dicloak.com/download"}
+                    >
+                        Download DICloak Browser
+                    </Button>
                 </div>
                 <div className={styles.content}>
                     <Menu
                         className={styles.menu}
                         defaultSelectedKeys={['1']}
                         defaultOpenKeys={['sub1']}
-                        selectedKeys={[selectedKey]} // 将 selectedKey 传入 selectedKeys
+                        selectedKeys={[selectedKey]}
                         mode="inline"
                         theme="dark"
                         items={items}
                         onClick={handleMenuClick}
                     />
-                    <Table className={styles.table} dataSource={countries} columns={columns} rowKey="id" />
+                    <Table
+                        className={styles.table}
+                        dataSource={countries}
+                        columns={generateColumns(columns)}
+                        pagination={false}
+                        rowKey="id"
+                        scroll={{ y: 628 }}
+                    />
                 </div>
             </main>
+            {contextHolder} {/* Render the message context holder here */}
         </div>
     );
 }

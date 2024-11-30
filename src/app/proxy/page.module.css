@@ -183,3 +183,15 @@ a.secondary {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+
+.isLoading {
+  position: fixed; /* 固定位置，确保loading不随页面滚动 */
+  top: 50%;        /* 垂直居中 */
+  left: 50%;       /* 水平居中 */
+  transform: translate(-50%, -50%); /* 通过平移实现完全居中 */
+  z-index: 9999;   /* 保证loading处于最上层 */
+  text-align: center; /* 居中文字居中 */
+  padding: 20px;   /* 增加内部间距 */
+  border-radius: 8px; /* 可选：圆角效果 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 可选：投影效果 */
+}
