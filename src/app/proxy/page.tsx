@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image";
 import styles from "./page.module.css";
 import {Button, Table, Tooltip, Collapse, Select} from 'antd';
 import { useRouter } from "next/navigation";

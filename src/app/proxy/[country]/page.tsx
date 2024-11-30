@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image";
 import styles from "./page.module.css";
 import {Button, Table, Tooltip, message, Select, Collapse} from 'antd';
 import { useRouter } from "next/navigation";
@@ -8,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Menu } from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
-import { Simulate } from "react-dom/test-utils";
 import {CopyOutlined, MinusOutlined, PlusOutlined} from '@ant-design/icons';
 import { qaData} from "@/app/proxy/[country]/qAndA";
 
