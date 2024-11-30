@@ -190,16 +190,20 @@ a.secondary {
 .download{
   display: flex;
   flex-direction: row;
-    align-items: center;
+  align-items: center;
   justify-content: space-around;
 }
 
 .downloadGroup{
-  width: 100px;
+  scale: 1.5;
+  width: 400px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  border: #13c798;
+  margin-bottom: 20px;
 }
 
 .subtilte{

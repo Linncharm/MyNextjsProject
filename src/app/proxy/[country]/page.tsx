@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Button, Table, Tooltip, message } from 'antd';
+import {Button, Table, Tooltip, message, Select, Collapse} from 'antd';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Menu } from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
 import { Simulate } from "react-dom/test-utils";
-import { CopyOutlined } from '@ant-design/icons';
+import {CopyOutlined, MinusOutlined, PlusOutlined} from '@ant-design/icons';
 import { qaData} from "@/app/proxy/[country]/qAndA";
 
 export default function Home({ params }: { params: {params:Promise<{country:string}>} }) {
@@ -77,6 +77,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
 
                 if (data && data.length > 0) {
                     setSelectedKey(data[0].type);
+                    console.log("选中的键值:", data[0].type);
                     return data[0].type;
                 } else {
                     console.warn("未找到匹配的路径");
@@ -126,22 +127,11 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
         setSelectedKey(e.key);
         setOpenKeys([e.key]);
         const fetchProxyPath = async () => {
-            let type: string = 'country';
-            if (e.key === 'china' || e.key === 'japan' || e.key === 'us' || e.key === 'usa') {
-                type = 'country';
-            }
-            if (e.key === 'http' || e.key === 'socks4' || e.key === 'socks5' || e.key === 'https') {
-                type = 'protocol';
-            }
-            if (e.key === 'http-anonymous' || e.key === 'http-high' || e.key === 'http-transparent' || e.key === 'socks4-very-high' || e.key === 'socks5-very-high') {
-                type = 'anonymity';
-            }
-
             try {
                 const { data, error } = await supabase
                     .from("router")
                     .select("path")
-                    .eq(type, e.key)
+                    .eq("type", e.key)
                     .single();
 
                 if (error) {
@@ -246,18 +236,27 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
         );
     }
 
+    const customExpandIcon = ({ isActive }) => (
+        isActive ? <MinusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px' }} />
+            : <PlusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px'}} />
+    );
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
                 <h1>Free Proxy Server List</h1>
                 <div className={styles.subtilte}>
-                    <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of reliable and secure free proxies, including free web proxies and proxy servers, all available to meet your online needs. Our free proxy list is regularly updated to ensure you have access to the latest free proxy sites and hosts. Whether you need an online proxy free of charge or a secure proxy server, we’ve got you covered with the best options available.</h3>
+                    <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of
+                        reliable and secure free proxies, including free web proxies and proxy servers, all available to
+                        meet your online needs. Our free proxy list is regularly updated to ensure you have access to
+                        the latest free proxy sites and hosts. Whether you need an online proxy free of charge or a
+                        secure proxy server, we’ve got you covered with the best options available.</h3>
                 </div>
                 <div className={styles.card}>
                     <h3>Use Free Proxies with DICloak Browser. Stay Secure and Anonymous!</h3>
                     <Button
                         className={styles.cardButton}
-                        href={"https://dicloak.com/download"}
+                        onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
                     >
                         Download DICloak Browser
                     </Button>
@@ -266,23 +265,102 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                     <Menu
                         className={styles.menu}
                         defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
+                        defaultOpenKeys={['sub1', 'sub2', 'sub3']}
                         selectedKeys={[selectedKey]}
                         mode="inline"
                         theme="dark"
                         items={dynamicItems}
                         onClick={handleMenuClick}
-                        onOpenChange={onOpenChange}
                     />
+                    <div className={styles.table}>
+                        <div className={styles.download}>
+                            <div style={{padding: '10px,', margin: '10px 15px 30px 20px'}}>
+                                <h2>Download our free proxy list in:</h2>
+                            </div>
+                            <div className={styles.downloadGroup}>
+                                <Select
+                                    defaultValue="JSON"
+                                    style={{ width: 180 }}
+                                    options={[
+                                        {value: 'JSON', label: 'JSON'},
+                                        {value: 'CSV', label: 'CSV'},
+                                        {value: 'TXT', label: 'TXT'},
+                                    ]}
+                                >
 
-                    <Table
-                        className={styles.table}
-                        dataSource={countries}
-                        columns={generateColumns(columns)}
-                        rowKey="id"
-                        pagination={false}
-                        scroll={{ y: 500 }}
-                    />
+                                </Select>
+                                <Button>
+                                    Download
+                                </Button>
+                            </div>
+
+                        </div>
+                        <Table
+                            dataSource={countries}
+                            columns={generateColumns(columns)}
+                            pagination={{
+                                position: ['bottomCenter'],
+                                //pageSize: 30,
+                            }}
+                            rowKey="id"
+                            scroll={{ y: 628 }}
+                        />
+                    </div>
+                </div>
+                <div className={styles.bottomCard}>
+                    <h1
+                        style={{
+                            textAlign: 'left',
+                            fontWeight: 'bold',
+                            color: '#ffffff',
+                            cursor: 'pointer',
+                            transition: 'color 0.3s',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#13c798')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
+                        onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
+                    >
+                        Guide to Using a Free Proxy with DICloak Antidetect Browser
+                        <span style={{marginRight: '10px'}}> {/* 图标与文本之间的间距 */}
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="-5 -5 24 24"
+                                 stroke-linecap="round" stroke-linejoin="round" className="ml-2 inline-block"
+                                 height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path
+                                d="M7 7h10v10"></path><path d="M7 17 17 7"></path>
+                            </svg>
+                        </span>
+                    </h1>
+                    <h4 style={{margin: '20px 0', lineHeight: '1.5', color: '#bfb9b9'}}>
+                        Our website offers a variety of free proxy types to suit your needs. You can easily download our
+                        free proxy list in TXT, CSV, or JSON format for offline access.
+                    </h4>
+                    <h4 style={{margin: '20px 0', lineHeight: '1.5', color: '#a29e9e'}}>
+                        Explore our free online proxy options to keep your browsing private and bypass geo-restrictions
+                        with ease. Stay anonymous and secure your personal data with our reliable proxy servers. Join
+                        thousands of users who trust us to find the best free proxies, including free web proxies and
+                        proxy servers, available today.
+                    </h4>
+                </div>
+                <div className={styles.questionAndAnswer}>
+                    <div className={styles.questionTitle}>
+                        <h1>Frequently Asked Questions</h1>
+                    </div>
+                    <div className={styles.questionContent}>
+                        <Collapse
+                            expandIcon={customExpandIcon}
+                            expandIconPosition={'end'}
+                        >
+                            {qaData.map((qa, index) => (
+                                <Collapse.Panel
+                                    header={<h1
+                                        style={{fontSize: '20px', margin: 0}}>{qa.question}</h1>} // 使用 h1 标签作为 header
+                                    key={index}
+                                    style={{backgroundColor: '#f0f0f0'}}
+                                >
+                                    <h3 style={{margin: 0 ,color:'#777575'}}>{qa.answer}</h3> {/* 使用 h3 标签作为内容 */}
+                                </Collapse.Panel>
+                            ))}
+                        </Collapse>
+                    </div>
                 </div>
             </main>
             {contextHolder} {/* Render the message context holder here */}

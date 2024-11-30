@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Menu , message} from 'antd';
-import { columns, items } from "@/app/proxy/[country]/data";
+import { columns, items } from "@/app/proxy/data";
 import {qaData} from "@/app/proxy/qAndA"
 import {CopyOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
 
@@ -31,6 +31,7 @@ export default function Home() {
                     id: index + 1, // 自增 ID
                 }));
                 setCountries(processedData || []);
+                //console.log('processedData:', processedData);
                 setIsLoading(false);
             }
         };
@@ -42,16 +43,16 @@ export default function Home() {
     const handleMenuClick = (e: { key: string }) => {
         setSelectedKey(e.key); // 更新选中的 key
         const fetchProxyPath = async () => {
-            let type: string = 'country';
-            if (e.key === 'china' || e.key === 'japan' || e.key === 'us' || e.key === 'usa') {
-                type = 'country';
-            }
-            if (e.key === 'http' || e.key === 'socks4' || e.key === 'socks5' || e.key === 'https') {
-                type = 'protocol';
-            }
-            if (e.key === 'http-anonymous' || e.key === 'http-high' || e.key === 'http-transparent' || e.key === 'socks4-very-high' || e.key === 'socks5-very-high') {
-                type = 'anonymity';
-            }
+            // let type: string = 'country';
+            // if (e.key === 'china' || e.key === 'japan' || e.key === 'us' || e.key === 'usa') {
+            //     type = 'country';
+            // }
+            // if (e.key === 'http' || e.key === 'socks4' || e.key === 'socks5' || e.key === 'https') {
+            //     type = 'protocol';
+            // }
+            // if (e.key === 'http-anonymous' || e.key === 'http-high' || e.key === 'http-transparent' || e.key === 'socks4-very-high' || e.key === 'socks5-very-high') {
+            //     type = 'anonymity';
+            // }
 
             try {
                 // 一定要将 supabase 的表设置为 public
@@ -59,7 +60,7 @@ export default function Home() {
                 const { data, error } = await supabase
                     .from("router")
                     .select("path") // 只查询所需字段，优化性能
-                    .eq(type, e.key)
+                    .eq("type", e.key) // 根据 key 查询
                     .single(); // 确保只返回一条记录
 
                 // 处理错误
@@ -168,15 +169,23 @@ export default function Home() {
                     />
                     <div className={styles.table}>
                         <div className={styles.download}>
-                            <div style={{padding: '10px,', marginTop: '10px',marginBottom:'10px',marginRight:'15px',marginLeft:'20px'}}>
+                            <div style={{padding: '10px,', margin: '10px 15px 30px 20px'}}>
                                 <h2>Download our free proxy list in:</h2>
                             </div>
                             <div className={styles.downloadGroup}>
-                                <Select>
+                                <Select
+                                    defaultValue="JSON"
+                                    style={{ width: 180 }}
+                                    options={[
+                                        {value: 'JSON', label: 'JSON'},
+                                        {value: 'CSV', label: 'CSV'},
+                                        {value: 'TXT', label: 'TXT'},
+                                    ]}
+                                >
 
                                 </Select>
                                 <Button>
-
+                                    Download
                                 </Button>
                             </div>
 
@@ -186,7 +195,7 @@ export default function Home() {
                             columns={generateColumns(columns)}
                             pagination={{
                                 position: ['bottomCenter'],
-                                pageSize: 30,
+                                //pageSize: 30,
                             }}
                             rowKey="id"
                             scroll={{ y: 628 }}
@@ -233,7 +242,7 @@ export default function Home() {
                     <div className={styles.questionContent}>
                         <Collapse
                             expandIcon={customExpandIcon}
-                            expandIconPosition={'right'}
+                            expandIconPosition={'end'}
                         >
                             {qaData.map((qa, index) => (
                                 <Collapse.Panel
