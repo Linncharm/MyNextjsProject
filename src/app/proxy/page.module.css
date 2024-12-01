@@ -180,6 +180,17 @@ a.secondary {
 
 .menu {
   width: 300px;
+  max-height: 750px; /* 设置最大高度 */
+  overflow-y: auto;  /* 启用垂直滚动 */
+}
+
+.menu::-webkit-scrollbar {
+  width: 8px; /* 设置滚动条宽度 */
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #13c798; /* 设置滚动条颜色 */
+  border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .table{

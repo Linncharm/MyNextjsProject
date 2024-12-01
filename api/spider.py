@@ -6,8 +6,10 @@ from supabase import create_client, Client
 
 def create_supabase_client():
     print("正在连接到 Supabase...")
-    url: str = os.getenv("SUPABASE_URL")  # 请替换为您的 Supabase URL
-    key: str = os.getenv("SUPABASE_KEY")  # 请替换为您的 Supabase Key
+    # url: str = os.getenv("SUPABASE_URL")  # 请替换为您的 Supabase URL
+    # key: str = os.getenv("SUPABASE_KEY")  # 请替换为您的 Supabase Key
+    url: str = 'https://qwgsejskmpyaxlntuyyp.supabase.co'  # 请替换为您的 Supabase URL
+    key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Z3NlanNrbXB5YXhsbnR1eXlwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMjk5MTczNCwiZXhwIjoyMDQ4NTY3NzM0fQ.-IGNvLGWkOpqNbHBFTV7mQKDDvqyxaUu0xYhUAfvIK4'  # 请替换为您的 Supabase Key
     client = create_client(url, key)
     print("成功连接到 Supabase。")
     return client
@@ -27,6 +29,25 @@ def get_country_full_name(country_code):
         "CO": "Colombia",
         "SG": "Singapore",
         "MX": "Mexico",
+        "IR": "Iran",
+        "FI": "Finland",
+        "TH": "Thailand",
+        "ZA": "South Africa",
+        "ID": "Indonesia",
+        "PH": "Philippines",
+        "VN": "Vietnam",
+        "IN": "India",
+        "EC": "Ecuador",
+        "KR": "South Korea",
+        "EG": "Egypt",
+        "TR": "Turkey",
+        "CL": "Chile",
+        "BD": "Bangladesh",
+        "PE": "Peru",
+        "VE": "Venezuela",
+        "ES": "Spain",
+        "AR": "Argentina",
+        "NL": "Netherlands",
     }
     return country_names.get(country_code, country_code)
 
@@ -43,15 +64,12 @@ def scrape_proxies(country_code):
     url = f"https://spys.one/free-proxy-list/{country_code}/"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
-        'Accept-Language': 'en,zh-CN;q=0.9,zh;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Cookie': '_ga=GA1.1.76419804.1733020290; cf_clearance=0TKnqjxg7srWI9IwJCoooGQJ098.ua1g.pFu30ZSnC0-1733020290-1.2.1.1-G_mjrQEpXyFXEuMWxISJRBV5Le79PifOzPbfD5cSq492Qmg9e1SoFW3uAji2gWXKeyuxRFnBQOU4UpS0I6JE8G62okqywJ0UjrCzRrmiGbyA2IdETzun9I_Sutbu5xFccsHP7huxX0DkXuC9.loa05Y6RyrJkZ5t2bK1Kg0cnG_yzd6WMGZ5JuVYDMBiFtujEY.ITefmgXN6st3wJhs1zYrZsMvtS.RWDoV6bblIxUu_jb3LLB0rEsPq.o2WvFzXsm5UsH8d.v2tsQMSEJuJ5Nhh6NQAzyeeAQ5bAeVu41ZTNuUVwpcN7e.l.HCn6vaoXsiS6yXVP9_VpWUUGNwdMetvU5r1guA6tMgqJCqSe3qf8lAAuZjLdiK2YI9CrjSpgnJCBF1L75GS8ZpjwctB5A; _ga_XWX5S73YKH=GS1.1.1733020290.1.1.1733020297.0.0.0; FCNEC=%5B%5B%22AKsRol_8yrzrCdZ8bcadpieJL-UMM3vYDWYAJcFxreVFae7EDU6YBjLjc-8s1iq7iM0oVpkvSYAzZgWMkE42g79npNHJp0BM4mf7T8xMsSbxdL6EAPcgN12UIV4glzs79wfRx3IObBTu-8vL8hb9imbxUJH-Ulijkg%3D%3D%22%5D%5D'
-    }
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',    }
 
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
+        print(response)
     except requests.exceptions.RequestException as e:
         print(f"请求失败，国家: {country_code}, 错误: {e}")
         return []
@@ -118,7 +136,38 @@ def replace_or_update_in_supabase(data):
     print("所有数据更新完成。")
 
 if __name__ == "__main__":
-    country_list = ["US", "GB", "CN", "RU", "BR", "JP", "HK", "CO", "SG", "MX"]
+
+    country_list = [
+        "US",
+        "GB",
+        "CN",
+        "RU",
+        "BR",
+        "JP",
+        "HK",
+        "CO",
+        "SG",
+        "MX",
+        "IR",
+        "FI",
+        "TH",
+        "ZA",
+        "ID",
+        "PH",
+        "VN",
+        "IN",
+        "EC",
+        "KR",
+        "EG",
+        "TR",
+        "CL",
+        "BD",
+        "PE",
+        "VE",
+        "ES",
+        "AR",
+        "NL",
+    ]
     all_proxies = []
 
     for country in country_list:
@@ -132,4 +181,5 @@ if __name__ == "__main__":
         print("未找到任何代理。")
         exit()
     # 将数据更新到 Supabase
+    print(len(all_proxies))
     replace_or_update_in_supabase(all_proxies)

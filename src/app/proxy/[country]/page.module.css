@@ -180,6 +180,17 @@ a.secondary {
 
 .menu {
   width: 300px;
+  max-height: 750px; /* 设置最大高度 */
+  overflow-y: auto;  /* 启用垂直滚动 */
+}
+
+.menu::-webkit-scrollbar {
+  width: 8px; /* 设置滚动条宽度 */
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #13c798; /* 设置滚动条颜色 */
+  border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .table{
@@ -248,4 +259,26 @@ a.secondary {
   font-size: 16px;
   overflow-y: auto; /* 允许垂直滚动 */
   margin-right: 100px;
+}
+
+.cancelLabel{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cancelIcon{
+  margin-right: 55px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px; /* 设置圆球的宽度 */
+  height: 15px; /* 设置圆球的高度 */
+  border-radius: 50%; /* 设置为圆形 */
+  background-color: #ffffff; /* 设置灰色背景 */
+  color: black; /* 使 ✖ 符号为黑色 */
+  font-size: 10px; /* 设置 ✖ 符号的大小 */
+  text-align: center; /* 让 ✖ 居中显示 */
+  line-height: 20px; /* 设置行高，使 ✖ 垂直居中 */
 }

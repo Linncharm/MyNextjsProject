@@ -5,7 +5,7 @@ import { message, Collapse} from 'antd';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { columns, items } from "@/app/proxy/[country]/data";
+import { columns, items } from "@/app/proxy/data";
 import {CopyOutlined, MinusOutlined, PlusOutlined} from '@ant-design/icons';
 import { qaData} from "@/app/proxy/[country]/qAndA";
 import dynamic from "next/dynamic";
@@ -49,6 +49,8 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
         const latestOpenKey = keys.find(key => !openKeys.includes(key));
         setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     };
+
+    const [selectedFormat, setSelectedFormat] = useState("JSON");
 
     const [countries, setCountries] = useState([]);
     const [selectedKey, setSelectedKey] = useState("1");
@@ -202,38 +204,24 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
     };
 
 
-        // 渲染菜单项
-        const renderMenuItems = (items) => {
+    // 渲染菜单项
+    const renderMenuItems = (items) => {
             return items.map((item) => {
                 return {
                     ...item,
                     label: (
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <div className={styles.cancelLabel}>
                             <span>{item.label}</span>
                             {/* 判断是否选中该菜单项 */}
                             {item.key === selectedKey && (
                                 <span
-                                    style={{
-                                        marginRight: 75,
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        width: '20px', // 设置圆球的宽度
-                                        height: '20px', // 设置圆球的高度
-                                        borderRadius: '50%', // 设置为圆形
-                                        backgroundColor: '#808080', // 设置灰色背景
-                                        color: 'black', // 使 ✖ 符号为白色
-                                        fontSize: '14px', // 设置 ✖ 符号的大小
-                                        textAlign: 'center', // 让 ✖ 居中显示
-                                        lineHeight: '20px', // 设置行高，使 ✖ 垂直居中
-                                    }}
+                                    className={styles.cancelIcon}
                                     onClick={(e) => {
                                         e.stopPropagation(); // 防止触发菜单项点击事件
                                         router.push('/proxy'); // 跳转到 /proxy 页面
                                     }}
                                 >
-                                ✖
+                                    ✖
                                 </span>
                             )}
                         </div>
@@ -244,8 +232,37 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
             });
         };
 
-        const dynamicItems = renderMenuItems(items);
+    const dynamicItems = renderMenuItems(items);
 
+    const handleDownload = () => {
+        let content;
+        if (selectedFormat === "JSON") {
+            content = JSON.stringify(countries, null, 2); // 格式化为 JSON
+        } else if (selectedFormat === "CSV") {
+            const headers = Object.keys(countries[0]).join(",") + "\n"; // 获取表头
+            const rows = countries.map(row => Object.values(row).join(",")).join("\n"); // 获取数据行
+            content = headers + rows; // 拼接表头和数据行
+        } else if (selectedFormat === "TXT") {
+            content = countries.map(row =>
+                `id: ${row.id}\n` +
+                `address: ${row.address}\n` +
+                `country: ${row.country}\n` +
+                `protocol: ${row.protocol}\n` +
+                `anonymity_level: ${row.anonymity_level}\n` +
+                `ping: ${row.ping}\n`
+            ).join("\n"); // 使用换行符分隔每个代理信息
+        } else {
+            return; // 不支持的格式
+        }
+
+        const blob = new Blob([content], { type: selectedFormat === "JSON" ? "application/json" : "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `proxies.${selectedFormat.toLowerCase()}`; // 设置下载文件名
+        a.click();
+        URL.revokeObjectURL(url); // 释放内存
+    };
 
     if (isLoading) {
         return (
@@ -300,6 +317,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                                 <Select
                                     defaultValue="JSON"
                                     style={{ width: 180 }}
+                                    onChange={setSelectedFormat}
                                     options={[
                                         {value: 'JSON', label: 'JSON'},
                                         {value: 'CSV', label: 'CSV'},
@@ -308,7 +326,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                                 >
 
                                 </Select>
-                                <Button>
+                                <Button onClick={handleDownload}>
                                     Download
                                 </Button>
                             </div>
@@ -319,7 +337,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                             columns={generateColumns(columns)}
                             pagination={{
                                 position: ['bottomCenter'],
-                                //pageSize: 30,
+                                pageSize: 30,
                             }}
                             rowKey="id"
                             scroll={{ y: 628 }}

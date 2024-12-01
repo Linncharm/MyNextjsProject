@@ -3,11 +3,11 @@
 import dynamic from "next/dynamic";
 import styles from "./page.module.css";
 //import {Button, Tooltip, Select} from 'antd';
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { message ,Collapse} from 'antd';
-import { columns, items } from "@/app/proxy/data";
+import {useRouter} from "next/navigation";
+import React, {useEffect, useState} from "react";
+import {createClient} from "@/utils/supabase/client";
+import {Collapse, message} from 'antd';
+import {columns, items} from "@/app/proxy/data";
 import {qaData} from "@/app/proxy/qAndA"
 import {CopyOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
 
@@ -33,6 +33,7 @@ const Table = dynamic(() => import('antd/es/table'), {
 
 
 export default function Home() {
+    const [selectedFormat, setSelectedFormat] = useState("JSON"); // 用于存储选择的格式
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const [countries, setCountries] = useState([]);
@@ -54,6 +55,16 @@ export default function Home() {
                 setCountries(processedData || []);
                 //console.log('processedData:', processedData);
                 setIsLoading(false);
+
+                // 提取并去重国家
+                const uniqueCountries = Array.from(new Set(processedData.map(item => item.country)));
+
+                // 创建 children 数组
+                items[0].children = uniqueCountries.map(country => ({
+                    key: country,
+                    label: country,
+                    type: 'country',
+                })); // 更新 items 的 children
             }
         };
 
@@ -64,17 +75,6 @@ export default function Home() {
     const handleMenuClick = (e: { key: string }) => {
         setSelectedKey(e.key); // 更新选中的 key
         const fetchProxyPath = async () => {
-            // let type: string = 'country';
-            // if (e.key === 'china' || e.key === 'japan' || e.key === 'us' || e.key === 'usa') {
-            //     type = 'country';
-            // }
-            // if (e.key === 'http' || e.key === 'socks4' || e.key === 'socks5' || e.key === 'https') {
-            //     type = 'protocol';
-            // }
-            // if (e.key === 'http-anonymous' || e.key === 'http-high' || e.key === 'http-transparent' || e.key === 'socks4-very-high' || e.key === 'socks5-very-high') {
-            //     type = 'anonymity';
-            // }
-
             try {
                 // 一定要将 supabase 的表设置为 public
                 // 从 Supabase 查询数据
@@ -144,6 +144,36 @@ export default function Home() {
         return newColumns;
     };
 
+    const handleDownload = () => {
+        let content;
+        if (selectedFormat === "JSON") {
+            content = JSON.stringify(countries, null, 2); // 格式化为 JSON
+        } else if (selectedFormat === "CSV") {
+            const headers = Object.keys(countries[0]).join(",") + "\n"; // 获取表头
+            const rows = countries.map(row => Object.values(row).join(",")).join("\n"); // 获取数据行
+            content = headers + rows; // 拼接表头和数据行
+        } else if (selectedFormat === "TXT") {
+            content = countries.map(row =>
+                `id: ${row.id}\n` +
+                `address: ${row.address}\n` +
+                `country: ${row.country}\n` +
+                `protocol: ${row.protocol}\n` +
+                `anonymity_level: ${row.anonymity_level}\n` +
+                `ping: ${row.ping}\n`
+            ).join("\n"); // 使用换行符分隔每个代理信息
+        } else {
+            return; // 不支持的格式
+        }
+
+        const blob = new Blob([content], { type: selectedFormat === "JSON" ? "application/json" : "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `proxies.${selectedFormat.toLowerCase()}`; // 设置下载文件名
+        a.click();
+        URL.revokeObjectURL(url); // 释放内存
+    };
+
     if (isLoading) {
         return (
             <div className={styles.isLoading}>
@@ -197,6 +227,7 @@ export default function Home() {
                                 <Select
                                     defaultValue="JSON"
                                     style={{ width: 180 }}
+                                    onChange={setSelectedFormat} // 更新选择的格式
                                     options={[
                                         {value: 'JSON', label: 'JSON'},
                                         {value: 'CSV', label: 'CSV'},
@@ -205,7 +236,7 @@ export default function Home() {
                                 >
 
                                 </Select>
-                                <Button>
+                                <Button onClick={handleDownload}>
                                     Download
                                 </Button>
                             </div>
