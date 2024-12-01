@@ -344,7 +344,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                             columns={generateColumns(columns)}
                             pagination={{
                                 position: ['bottomCenter'],
-                                defaultPageSize: 30,
+                                defaultPageSize: 10,
                             }}
                             rowKey="id"
                             scroll={{ y: 628 }}
