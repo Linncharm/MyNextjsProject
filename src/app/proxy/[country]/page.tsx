@@ -89,10 +89,10 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                     .select("type")
                     .eq("path", path);
 
-                if (error) {
-                    console.error("数据库查询错误:", error);
-                    return;
-                }
+                // if (error) {
+                //     console.error("数据库查询错误:", error);
+                //     return;
+                // }
 
                 if (data && data.length > 0) {
                     setSelectedKey(data[0].type);
@@ -153,17 +153,17 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                     .eq("type", e.key)
                     .single();
 
-                if (error) {
-                    console.error("查询失败：", error.message);
-                    alert(`无法获取国家路径，错误信息：${error.message}`);
-                    return;
-                }
-
-                if (!data || !data.path) {
-                    console.error("查询结果为空或缺少 'path' 字段");
-                    alert(`无法获取有效的国家路径，请稍后重试。`);
-                    return;
-                }
+                // if (error) {
+                //     console.error("查询失败：", error.message);
+                //     alert(`无法获取国家路径，错误信息：${error.message}`);
+                //     return;
+                // }
+                //
+                // if (!data || !data.path) {
+                //     console.error("查询结果为空或缺少 'path' 字段");
+                //     alert(`无法获取有效的国家路径，请稍后重试。`);
+                //     return;
+                // }
 
                 router.push(`/proxy/${data.path}`);
             } catch (err) {
