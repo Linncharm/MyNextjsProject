@@ -192,7 +192,7 @@ export default function Home() {
         <div className={styles.page}>
             <main className={styles.main}>
                 <h1>Free Proxy Server List</h1>
-                <div className={styles.subtilte}>
+                <div className={styles.subtitle}>
                     <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of
                         reliable and secure free proxies, including free web proxies and proxy servers, all available to
                         meet your online needs. Our free proxy list is regularly updated to ensure you have access to
@@ -221,11 +221,11 @@ export default function Home() {
                     />
                     <div className={styles.table}>
                         <div className={styles.download}>
-                            <div style={{padding: '10px,', margin: '10px 15px 30px 20px'}}>
+                            <div style={{padding: '10px 55px 10px 10px', margin: '10px 15px 30px 20px'}}>
                                 <h2>Download our free proxy list in:</h2>
                             </div>
                             <div className={styles.downloadGroup}>
-                                <Select
+                            <Select
                                     defaultValue="JSON"
                                     style={{ width: 180 }}
                                     onChange={setSelectedFormat} // 更新选择的格式

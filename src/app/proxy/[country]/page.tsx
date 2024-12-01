@@ -147,37 +147,26 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
         });
     };
 
+    //将函数提取到外面防止调用栈过多
+    const fetchProxyPath = async (key:string) => {
+        try {
+            const { data, error } = await supabase
+                .from("router")
+                .select("path")
+                .eq("type", key)
+                .single();
+            router.push(`/proxy/${data.path}`);
+        } catch (err) {
+            console.error("发生意外错误：", err);
+        } finally {
+            console.log("已跳转到指定路径");
+        }
+    };
+
     const handleMenuClick = (e: { key: string }) => {
         setSelectedKey(e.key);
         setOpenKeys([e.key]);
-        const fetchProxyPath = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from("router")
-                    .select("path")
-                    .eq("type", e.key)
-                    .single();
-
-                // if (error) {
-                //     console.error("查询失败：", error.message);
-                //     alert(`无法获取国家路径，错误信息：${error.message}`);
-                //     return;
-                // }
-                //
-                // if (!data || !data.path) {
-                //     console.error("查询结果为空或缺少 'path' 字段");
-                //     alert(`无法获取有效的国家路径，请稍后重试。`);
-                //     return;
-                // }
-
-                router.push(`/proxy/${data.path}`);
-            } catch (err) {
-                console.error("发生意外错误：", err);
-                alert("发生意外错误，请稍后重试。");
-            }
-        };
-
-        fetchProxyPath();
+        fetchProxyPath(e.key);
     };
 
     const generateColumns = (columns) => {
@@ -297,7 +286,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
         <div className={styles.page}>
             <main className={styles.main}>
                 <h1>{title}</h1>
-                <div className={styles.subtilte}>
+                <div className={styles.subtitle}>
                     <h3>Looking for a way to browse the web anonymously in {selectedKey}? Our Free Proxy Server List has got you covered. With these free proxies, you can hide your IP address and protect your online privacy. Whether you need a free web proxy or a proxy server free of charge, our list offers many options. You can find a free proxy site or free proxy host that fits your needs, allowing you to surf the internet safely. Check out our free proxy list to enjoy secure and private browsing without any cost.</h3>
                 </div>
                 <div className={styles.card}>
@@ -322,7 +311,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                     />
                     <div className={styles.table}>
                         <div className={styles.download}>
-                            <div style={{padding: '10px,', margin: '10px 15px 30px 20px'}}>
+                            <div style={{padding: '10px 55px 10px 10px', margin: '10px 15px 30px 20px'}}>
                                 <h2>Download our free proxy list in:</h2>
                             </div>
                             <div className={styles.downloadGroup}>
@@ -361,18 +350,18 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                         style={{
                             textAlign: 'left',
                             fontWeight: 'bold',
-                            color: '#ffffff',
+                            color: 'var(--h1-color)',
                             cursor: 'pointer',
                             transition: 'color 0.3s',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#bf2020')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#13c798')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--h1-color)')}
                         onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
                     >
                         Guide to Using a Free Proxy with DICloak Antidetect Browser
                         <span style={{marginRight: '10px'}}> {/* 图标与文本之间的间距 */}
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="-5 -5 24 24"
-                                 stroke-linecap="round" stroke-linejoin="round" className="ml-2 inline-block"
+                            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="-5 -5 24 24"
+                                 strokeLinecap="round" strokeLinejoin="round" className="ml-2 inline-block"
                                  height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path
                                 d="M7 7h10v10"></path><path d="M7 17 17 7"></path>
                             </svg>

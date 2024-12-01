@@ -131,6 +131,7 @@ a.secondary {
   gap: 32px;
   height: 100%;
   width: 100%;
+  margin-top: 30px;
 }
 
 .card {
@@ -210,17 +211,18 @@ a.secondary {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 10px;
   border: #13c798;
   margin-bottom: 20px;
+  margin-right: 70px;
 }
 
-.subtilte{
-  padding-left: 200px;
-  padding-right: 200px;
-  padding-top: 50px;
-  padding-bottom: 50px;
+.subtitle{
+  padding: 0 300px 50px 300px;
+  text-align: center;
+  line-height: 1.5;
+  color: #8d8989;
 }
 
 .isLoading {
