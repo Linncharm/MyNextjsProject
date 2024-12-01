@@ -9,7 +9,7 @@ def create_supabase_client():
     # url: str = os.getenv("SUPABASE_URL")  # 请替换为您的 Supabase URL
     # key: str = os.getenv("SUPABASE_KEY")  # 请替换为您的 Supabase Key
     url: str = 'https://qwgsejskmpyaxlntuyyp.supabase.co'  # 请替换为您的 Supabase URL
-    key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Z3NlanNrbXB5YXhsbnR1eXlwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzA1MTY4NSwiZXhwIjoyMDQ4NjI3Njg1fQ.Xfja_DhkwXCVOB7WPaBNJdb3xWbOzf0caTzpfo6NCdg'
+    key: str = ''
     client = create_client(url, key)
     print("成功连接到 Supabase。")
     return client
