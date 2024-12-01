@@ -6,8 +6,8 @@ from supabase import create_client, Client
 
 def create_supabase_client():
     print("正在连接到 Supabase...")
-    url: str = "https://qwgsejskmpyaxlntuyyp.supabase.co"
-    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3Z3NlanNrbXB5YXhsbnR1eXlwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMjc2ODY4NSwiZXhwIjoyMDQ4MzQ0Njg1fQ.csU676FUxPdTRY0zDlMVZP4_UmUiQ1rzLm6q7FwRc0Q"  # 请替换为您的真实密钥
+    url: str = os.getenv("SUPABASE_URL")  # 请替换为您的 Supabase URL
+    key: str = os.getenv("SUPABASE_KEY")  # 请替换为您的 Supabase Key
     client = create_client(url, key)
     print("成功连接到 Supabase。")
     return client

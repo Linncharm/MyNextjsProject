@@ -24,4 +24,7 @@ jobs:
           pip install requests beautifulsoup4 supabase bs4
 
       - name: Run script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: python api/spider.py  # 替换为您的脚本路径
