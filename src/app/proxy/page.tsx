@@ -187,6 +187,7 @@ export default function Home() {
             : <PlusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px'}} />
     );
 
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
@@ -260,18 +261,18 @@ export default function Home() {
                         style={{
                             textAlign: 'left',
                             fontWeight: 'bold',
-                            color: '#ffffff',
+                            color: 'var(--h1-color)',
                             cursor: 'pointer',
                             transition: 'color 0.3s',
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.color = '#13c798')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--h1-color)')}
                         onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
                     >
                         Guide to Using a Free Proxy with DICloak Antidetect Browser
                         <span style={{marginRight: '10px'}}> {/* 图标与文本之间的间距 */}
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="-5 -5 24 24"
-                                 stroke-linecap="round" stroke-linejoin="round" className="ml-2 inline-block"
+                            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="-5 -5 24 24"
+                                 strokeLinecap="round" strokeLinejoin="round" className="ml-2 inline-block"
                                  height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path
                                 d="M7 7h10v10"></path><path d="M7 17 17 7"></path>
                             </svg>
@@ -296,18 +297,8 @@ export default function Home() {
                         <Collapse
                             expandIcon={customExpandIcon}
                             expandIconPosition={'end'}
-                        >
-                            {qaData.map((qa, index) => (
-                                <Collapse.Panel
-                                    header={<h1
-                                        style={{fontSize: '20px', margin: 0}}>{qa.question}</h1>} // 使用 h1 标签作为 header
-                                    key={index}
-                                    style={{backgroundColor: '#f0f0f0'}}
-                                >
-                                    <h3 style={{margin: 0 ,color:'#777575'}}>{qa.answer}</h3> {/* 使用 h3 标签作为内容 */}
-                                </Collapse.Panel>
-                            ))}
-                        </Collapse>
+                            items={qaData}
+                        />
                     </div>
                 </div>
             </main>

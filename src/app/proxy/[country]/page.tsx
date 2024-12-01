@@ -282,8 +282,13 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
 
         const questionAndAnswer = [
             {
-                question: `Are free ${selectedKey} proxy servers safe to use?`,
-                answer:`The safety of free ${selectedKey} proxy servers can vary. While many free proxies are legitimate and offer basic levels of security, others may be less reliable and could pose risks. Some free proxies might log your activity, inject ads, or even expose your data to third parties. To minimize risks, it’s important to choose proxy servers from reputable sources that offer clear privacy policies. It’s also wise to avoid entering sensitive information, such as passwords or credit card numbers, when using a free proxy, as they may not offer the same level of encryption as paid services.`
+                key:0,
+                label: <h1 style={{fontSize: '20px', margin: 0 , backgroundColor:'#f0f0f0'}}>Are free {selectedKey} proxy servers safe to use</h1>,
+                children: <h3 style={{margin:0,color:'#777575'}}>
+                    The safety of free {selectedKey} proxy servers can vary. While many free proxies are legitimate and offer basic levels of security,
+                    others may be less reliable and could pose risks. Some free proxies might log your activity, inject ads, or even expose your data to third parties.
+                    To minimize risks, it’s important to choose proxy servers from reputable sources that offer clear privacy policies. It’s also wise to avoid entering sensitive information,
+                    such as passwords or credit card numbers, when using a free proxy, as they may not offer the same level of encryption as paid services.</h3>
             },
             ...qaData,
         ]
@@ -360,7 +365,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                             cursor: 'pointer',
                             transition: 'color 0.3s',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#13c798')}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#bf2020')}
                         onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
                         onClick={() => window.open('https://dicloak.com/download', '_blank')} // 在新标签页打开链接
                     >
@@ -392,18 +397,8 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                         <Collapse
                             expandIcon={customExpandIcon}
                             expandIconPosition={'end'}
-                        >
-                            {questionAndAnswer.map((qa, index) => (
-                                <Collapse.Panel
-                                    header={<h1
-                                        style={{fontSize: '20px', margin: 0}}>{qa.question}</h1>} // 使用 h1 标签作为 header
-                                    key={index}
-                                    style={{backgroundColor: '#f0f0f0'}}
-                                >
-                                    <h3 style={{margin: 0 ,color:'#777575'}}>{qa.answer}</h3> {/* 使用 h3 标签作为内容 */}
-                                </Collapse.Panel>
-                            ))}
-                        </Collapse>
+                            items={questionAndAnswer}
+                        />
                     </div>
                 </div>
             </main>

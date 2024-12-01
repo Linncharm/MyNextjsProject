@@ -21,6 +21,10 @@
     color: #13c798 !important; /* 默认颜色 */
 }
 
+.ant-collapse-item >.ant-collapse-header{
+  background-color: #f0f0f0 !important; /* 默认颜色 */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
