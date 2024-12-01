@@ -42,7 +42,10 @@ def scrape_proxies(country_code):
     print(f"正在抓取 {country_code} 的代理...")
     url = f"https://spys.one/free-proxy-list/{country_code}/"
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+        'Accept-Language': 'en,zh-CN;q=0.9,zh;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     }
 
     try:
@@ -124,5 +127,8 @@ if __name__ == "__main__":
     # 随机打乱代理数据
     random.shuffle(all_proxies)
 
+    if len(all_proxies) == 0:
+        print("未找到任何代理。")
+        exit()
     # 将数据更新到 Supabase
     replace_or_update_in_supabase(all_proxies)
