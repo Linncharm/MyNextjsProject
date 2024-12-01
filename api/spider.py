@@ -46,6 +46,7 @@ def scrape_proxies(country_code):
         'Accept-Language': 'en,zh-CN;q=0.9,zh;q=0.8',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Cookie': '_ga=GA1.1.76419804.1733020290; cf_clearance=0TKnqjxg7srWI9IwJCoooGQJ098.ua1g.pFu30ZSnC0-1733020290-1.2.1.1-G_mjrQEpXyFXEuMWxISJRBV5Le79PifOzPbfD5cSq492Qmg9e1SoFW3uAji2gWXKeyuxRFnBQOU4UpS0I6JE8G62okqywJ0UjrCzRrmiGbyA2IdETzun9I_Sutbu5xFccsHP7huxX0DkXuC9.loa05Y6RyrJkZ5t2bK1Kg0cnG_yzd6WMGZ5JuVYDMBiFtujEY.ITefmgXN6st3wJhs1zYrZsMvtS.RWDoV6bblIxUu_jb3LLB0rEsPq.o2WvFzXsm5UsH8d.v2tsQMSEJuJ5Nhh6NQAzyeeAQ5bAeVu41ZTNuUVwpcN7e.l.HCn6vaoXsiS6yXVP9_VpWUUGNwdMetvU5r1guA6tMgqJCqSe3qf8lAAuZjLdiK2YI9CrjSpgnJCBF1L75GS8ZpjwctB5A; _ga_XWX5S73YKH=GS1.1.1733020290.1.1.1733020297.0.0.0; FCNEC=%5B%5B%22AKsRol_8yrzrCdZ8bcadpieJL-UMM3vYDWYAJcFxreVFae7EDU6YBjLjc-8s1iq7iM0oVpkvSYAzZgWMkE42g79npNHJp0BM4mf7T8xMsSbxdL6EAPcgN12UIV4glzs79wfRx3IObBTu-8vL8hb9imbxUJH-Ulijkg%3D%3D%22%5D%5D'
     }
 
     try:
