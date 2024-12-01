@@ -248,6 +248,7 @@ export default function Home() {
                             pagination={{
                                 position: ['bottomCenter'],
                                 //pageSize: 30,
+                                defaultPageSize: 30,
                             }}
                             rowKey="id"
                             scroll={{ y: 628 }}

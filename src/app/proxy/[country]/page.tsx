@@ -52,6 +52,8 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
 
     const [selectedFormat, setSelectedFormat] = useState("JSON");
 
+    const [title,setTitle] = useState("Free Proxy Server List");
+
     const [countries, setCountries] = useState([]);
     const [selectedKey, setSelectedKey] = useState("1");
     const [isLoading, setIsLoading] = useState(true);
@@ -88,7 +90,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
             try {
                 const { data, error } = await supabase
                     .from("router")
-                    .select("type")
+                    .select("type,title")
                     .eq("path", path);
 
                 // if (error) {
@@ -98,7 +100,8 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
 
                 if (data && data.length > 0) {
                     setSelectedKey(data[0].type);
-                    console.log("选中的键值:", data[0].type);
+                    console.log("选中的键值和标题", data[0]);
+                    setTitle(data[0].title);
                     return data[0].type;
                 } else {
                     console.warn("未找到匹配的路径");
@@ -277,16 +280,20 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
             : <PlusOutlined style={{ fontSize: '16px', color: '#000000' ,marginRight:'10px',marginTop:'10px'}} />
     );
 
+        const questionAndAnswer = [
+            {
+                question: `Are free ${selectedKey} proxy servers safe to use?`,
+                answer:`The safety of free ${selectedKey} proxy servers can vary. While many free proxies are legitimate and offer basic levels of security, others may be less reliable and could pose risks. Some free proxies might log your activity, inject ads, or even expose your data to third parties. To minimize risks, it’s important to choose proxy servers from reputable sources that offer clear privacy policies. It’s also wise to avoid entering sensitive information, such as passwords or credit card numbers, when using a free proxy, as they may not offer the same level of encryption as paid services.`
+            },
+            ...qaData,
+        ]
+
     return (
         <div className={styles.page}>
             <main className={styles.main}>
-                <h1>Free Proxy Server List</h1>
+                <h1>{title}</h1>
                 <div className={styles.subtilte}>
-                    <h3>Welcome to your go-to source for the best free proxy server list. We offer a wide range of
-                        reliable and secure free proxies, including free web proxies and proxy servers, all available to
-                        meet your online needs. Our free proxy list is regularly updated to ensure you have access to
-                        the latest free proxy sites and hosts. Whether you need an online proxy free of charge or a
-                        secure proxy server, we’ve got you covered with the best options available.</h3>
+                    <h3>Looking for a way to browse the web anonymously in {selectedKey}? Our Free Proxy Server List has got you covered. With these free proxies, you can hide your IP address and protect your online privacy. Whether you need a free web proxy or a proxy server free of charge, our list offers many options. You can find a free proxy site or free proxy host that fits your needs, allowing you to surf the internet safely. Check out our free proxy list to enjoy secure and private browsing without any cost.</h3>
                 </div>
                 <div className={styles.card}>
                     <h3>Use Free Proxies with DICloak Browser. Stay Secure and Anonymous!</h3>
@@ -337,7 +344,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                             columns={generateColumns(columns)}
                             pagination={{
                                 position: ['bottomCenter'],
-                                pageSize: 30,
+                                defaultPageSize: 30,
                             }}
                             rowKey="id"
                             scroll={{ y: 628 }}
@@ -386,7 +393,7 @@ export default function Home({ params }: { params: {params:Promise<{country:stri
                             expandIcon={customExpandIcon}
                             expandIconPosition={'end'}
                         >
-                            {qaData.map((qa, index) => (
+                            {questionAndAnswer.map((qa, index) => (
                                 <Collapse.Panel
                                     header={<h1
                                         style={{fontSize: '20px', margin: 0}}>{qa.question}</h1>} // 使用 h1 标签作为 header

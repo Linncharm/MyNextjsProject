@@ -3,6 +3,24 @@
   --foreground: #171717;
 }
 
+/* 覆盖向前跳转图标的颜色 */
+.ant-pagination .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-ellipsis {
+  color: #ffffff !important; /* 默认颜色 */
+}
+
+/* 覆盖向后跳转图标的颜色 */
+.ant-pagination .ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis {
+  color: #ffffff !important; /* 默认颜色 */
+}
+
+.ant-pagination .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-link-icon{
+  color: #13c798 !important; /* 默认颜色 */
+}
+
+.ant-pagination .ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-link-icon{
+    color: #13c798 !important; /* 默认颜色 */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

@@ -190,12 +190,20 @@ a.secondary {
 
 .menu::-webkit-scrollbar-thumb {
   background: #13c798; /* 设置滚动条颜色 */
-  border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .table{
   flex:1;
   width: 30%;
+}
+
+.table::-webkit-scrollbar {
+  width: 8px; /* 设置滚动条宽度 */
+}
+
+.table::-webkit-scrollbar-thumb {
+  background: #13c798; /* 设置滚动条颜色 */
+  border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .download{

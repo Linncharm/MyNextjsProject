@@ -190,7 +190,6 @@ a.secondary {
 
 .menu::-webkit-scrollbar-thumb {
   background: #13c798; /* 设置滚动条颜色 */
-  border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .table{
