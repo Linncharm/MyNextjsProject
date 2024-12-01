@@ -1,14 +1,36 @@
 'use client'
 
+import dynamic from "next/dynamic";
 import styles from "./page.module.css";
-import {Button, Table, Tooltip, Collapse, Select} from 'antd';
+//import {Button, Tooltip, Select} from 'antd';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Menu , message} from 'antd';
+import { message ,Collapse} from 'antd';
 import { columns, items } from "@/app/proxy/data";
 import {qaData} from "@/app/proxy/qAndA"
 import {CopyOutlined, MinusOutlined, PlusOutlined} from "@ant-design/icons";
+
+const Button = dynamic(() => import('antd/es/button'), {
+    loading: () => <p>Loading Button...</p>,
+});
+
+const Select = dynamic(() => import('antd/es/select'), {
+    loading: () => <p>Loading Select...</p>,
+});
+
+const Menu = dynamic(() => import('antd/es/menu'), {
+    loading: () => <p>Loading Menu...</p>,
+});
+
+const Tooltip = dynamic(() => import('antd/es/tooltip'), {
+    loading: () => <p>Loading Tooltip...</p>,
+});
+
+const Table = dynamic(() => import('antd/es/table'), {
+    loading: () => <p>Loading Table...</p>,
+});
+
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(true);

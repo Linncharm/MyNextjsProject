@@ -1,14 +1,35 @@
 "use client"
 
 import styles from "./page.module.css";
-import {Button, Table, Tooltip, message, Select, Collapse} from 'antd';
+import { message, Collapse} from 'antd';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Menu } from 'antd';
 import { columns, items } from "@/app/proxy/[country]/data";
 import {CopyOutlined, MinusOutlined, PlusOutlined} from '@ant-design/icons';
 import { qaData} from "@/app/proxy/[country]/qAndA";
+import dynamic from "next/dynamic";
+
+const Button = dynamic(() => import('antd/es/button'), {
+    loading: () => <p>Loading Button...</p>,
+});
+
+const Select = dynamic(() => import('antd/es/select'), {
+    loading: () => <p>Loading Select...</p>,
+});
+
+const Menu = dynamic(() => import('antd/es/menu'), {
+    loading: () => <p>Loading Menu...</p>,
+});
+
+const Tooltip = dynamic(() => import('antd/es/tooltip'), {
+    loading: () => <p>Loading Tooltip...</p>,
+});
+
+const Table = dynamic(() => import('antd/es/table'), {
+    loading: () => <p>Loading Table...</p>,
+});
+
 
 export default function Home({ params }: { params: {params:Promise<{country:string}>} }) {
     const getPath = async (): Promise<string | undefined> => {
